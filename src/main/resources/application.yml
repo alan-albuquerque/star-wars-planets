@@ -1,7 +1,11 @@
 spring:
   application:
     name: "Star Wars Planets"
+  data:
+    mongodb:
+      uri: ${MONGO_URL}
 
 server:
   port: 8080
+
 
