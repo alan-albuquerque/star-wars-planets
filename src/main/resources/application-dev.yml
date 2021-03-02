@@ -1,3 +1,8 @@
+logging:
+  level:
+    ROOT: INFO
+    com.alantech.starwarsplanets: DEBUG
+
 spring:
   application:
     name: "Star Wars Planets - DEV"
