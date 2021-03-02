@@ -1,4 +1,6 @@
-package com.alantech.starwarsplanets.service.dto;
+package com.alantech.starwarsplanets.dto;
+
+import javax.validation.constraints.NotEmpty;
 
 import lombok.Builder;
 import lombok.Data;
@@ -7,7 +9,10 @@ import lombok.Data;
 @Builder
 public class PlanetDTO {
 	private String id;
+	@NotEmpty
 	private String name;
+	@NotEmpty
 	private String climate;
+	@NotEmpty
 	private String terrain;
 }
