@@ -1,5 +1,7 @@
 package com.alantech.starwarsplanets.controller.v1;
 
+import java.util.List;
+
 import com.alantech.starwarsplanets.IntegrationTest;
 import com.alantech.starwarsplanets.common.RestTestUtil;
 import com.alantech.starwarsplanets.domain.Planet;
@@ -11,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,6 +53,24 @@ class PlanetControllerIT {
 		assertThat(testPlanet.getClimate()).isEqualTo(CLIMATE);
 		assertThat(testPlanet.getTerrain()).isEqualTo(TERRAIN);
 		assertThat(testPlanet.getId()).isNotEmpty();
+	}
+
+	@Test
+	void assertThatWillReturnValidationErrorWithWrongInput() throws Exception {
+		long planetsCountBefore = planetRepository.count();
+
+		// we'll send a empty planet, but some fields are required, it must fail with a bad request as response.
+		PlanetDTO planetDTO = PlanetDTO.builder().build();
+
+		this.mockMvc.perform(
+			post("/api/v1/planets/")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(RestTestUtil.toJson(planetDTO))
+		)
+			.andExpect(status().isBadRequest());
+
+		assertThat(planetRepository.count()).isEqualTo(planetsCountBefore);
+
 	}
 
 }
