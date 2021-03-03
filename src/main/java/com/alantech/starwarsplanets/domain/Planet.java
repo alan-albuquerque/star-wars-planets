@@ -15,7 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-@Document(collation = "planets")
+@Document(collection = "planets")
 public class Planet extends AbstractAuditableDocument {
 	private String name;
 	private String climate;
