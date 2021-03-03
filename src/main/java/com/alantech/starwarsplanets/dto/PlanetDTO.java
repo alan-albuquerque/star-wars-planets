@@ -3,16 +3,16 @@ package com.alantech.starwarsplanets.dto;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @Builder
 public class PlanetDTO {
-	private String id;
+	private final String id;
 	@NotEmpty
-	private String name;
+	private final String name;
 	@NotEmpty
-	private String climate;
+	private final String climate;
 	@NotEmpty
-	private String terrain;
+	private final String terrain;
 }

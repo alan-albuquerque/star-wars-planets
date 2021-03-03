@@ -2,19 +2,44 @@ package com.alantech.starwarsplanets.domain;
 
 import java.util.Date;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
+
+@Getter
+@Setter
+@SuperBuilder
+@NoArgsConstructor
 @ToString(callSuper = true)
-public class AbstractAuditableDocument extends AbstractDocument {
+public class AbstractAuditableDocument {
+	@Id
+	protected String id;
+
 	@CreatedDate
-	private Date createdDate;
+	protected Date createdDate;
 
 	@LastModifiedDate
-	private Date lastModifiedDate;
+	protected Date lastModifiedDate;
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof AbstractAuditableDocument)) {
+			return false;
+		}
+		return id != null && id.equals(((AbstractAuditableDocument) o).id);
+	}
+
+	@Override
+	public int hashCode() {
+		return getClass().hashCode();
+	}
 }

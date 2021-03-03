@@ -24,9 +24,15 @@ import org.springframework.core.env.Profiles;
 public class LoggingAspect {
 
 	private final Environment env;
+	private Logger logger;
 
 	public LoggingAspect(Environment env) {
 		this.env = env;
+	}
+
+	public LoggingAspect(Environment env, Logger logger) {
+		this.env = env;
+		this.logger = logger;
 	}
 
 	/**
@@ -59,8 +65,8 @@ public class LoggingAspect {
 	 * @param joinPoint join point we want the logger for.
 	 * @return {@link Logger} associated to the given {@link JoinPoint}.
 	 */
-	private Logger logger(JoinPoint joinPoint) {
-		return LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
+	public Logger logger(JoinPoint joinPoint) {
+		return this.logger != null ? this.logger : LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringTypeName());
 	}
 
 	/**

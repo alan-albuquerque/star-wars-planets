@@ -1,13 +1,14 @@
 package com.alantech.starwarsplanets.common;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-public final class RestTestUtil {
+public final class MapperTestUtil {
 
 	private static final ObjectMapper mapper = createObjectMapper();
 
@@ -28,5 +29,16 @@ public final class RestTestUtil {
 	 */
 	public static String toJson(Object object) throws IOException {
 		return mapper.writeValueAsString(object);
+	}
+
+	/**
+	 * Convert a JSON string to a list of objects.
+	 *
+	 * @param jsonInput the JSON string.
+	 * @return the converted object.
+	 * @throws IOException if it receives a invalid JSON string.
+	 */
+	public static <T> List<T> toObjectList(String jsonInput, Class<T> myClass) throws IOException {
+		return mapper.readValue(jsonInput, mapper.getTypeFactory().constructCollectionType(List.class, myClass));
 	}
 }

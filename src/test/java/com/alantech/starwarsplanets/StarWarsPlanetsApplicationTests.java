@@ -7,7 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 class StarWarsPlanetsApplicationTests {
 
 	@Test
-	void contextLoads() {
+	@SuppressWarnings("java:S2699")
+	void smokeTestApplication() {
+		StarWarsPlanetsApplication.main(new String[]{});
 	}
 
 }

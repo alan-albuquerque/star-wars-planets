@@ -8,7 +8,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -67,7 +66,6 @@ public class ApiExceptionHandler {
 
 	@Getter
 	@Setter
-	@AllArgsConstructor
 	@NoArgsConstructor
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	private static class ErrorItem {
