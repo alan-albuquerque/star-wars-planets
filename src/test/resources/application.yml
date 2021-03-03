@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: "Star Wars Planets - TEST"
+  data:
+    mongodb:
+      uri: "mongodb://root:123456@localhost:27017/starwars?authSource=admin"
+
+server:
+  port: 8080
+
+
