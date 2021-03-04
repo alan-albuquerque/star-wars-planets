@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -100,18 +101,43 @@ class PlanetControllerIT {
 	}
 
 	@Test
+	void Should_FindByNameReturnPlanet_When_Exists() throws Exception {
+
+		Planet planet = Planet.builder()
+			.terrain(TERRAIN)
+			.name(UUID.randomUUID().toString())
+			.climate(CLIMATE)
+			.build();
+
+		planetRepository.save(planet);
+
+		MvcResult mvcResult = this.mockMvc.perform(
+			get("/api/v1/planets/name/{name}", planet.getName())
+		)
+			.andExpect(status().isOk()).andReturn();
+
+		Planet foundedPlanet = MapperTestUtil.toObject(mvcResult.getResponse().getContentAsString(), Planet.class);
+
+		assertThat(foundedPlanet.getTerrain()).isEqualTo(planet.getTerrain());
+		assertThat(foundedPlanet.getName()).isEqualTo(planet.getName());
+		assertThat(foundedPlanet.getClimate()).isEqualTo(planet.getClimate());
+		assertThat(foundedPlanet.getId()).isNotEmpty();
+		assertThat(foundedPlanet.getCreatedDate()).isNotNull();
+		assertThat(foundedPlanet.getLastModifiedDate()).isNotNull();
+	}
+
+	@Test
 	void Should_FindByNameReturnNotFound_When_NotExists() throws Exception {
 		this.mockMvc.perform(
-			get("/api/v1/planets/name/")
-				.param(SEARCH_BY_NAME_KEY, "potato123") // <-- nonexistent name
+			get("/api/v1/planets/name/{name}", "potato123") // <-- nonexistent name
 		)
 			.andExpect(status().isNotFound());
 	}
+
 	@Test
 	void Should_FindByNameReturnNotFound_When_ParamIsEmpty() throws Exception {
 		this.mockMvc.perform(
-			get("/api/v1/planets/name")
-				.param(SEARCH_BY_NAME_KEY, "") // <-- parameter can't be empty
+			get("/api/v1/planets/name/{name}", "")
 		)
 			.andExpect(status().isNotFound());
 	}
