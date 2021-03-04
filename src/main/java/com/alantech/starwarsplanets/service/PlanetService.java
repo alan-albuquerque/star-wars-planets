@@ -8,6 +8,8 @@ import com.alantech.starwarsplanets.service.exception.PlanetAlreadyExistsExcepti
 import com.alantech.starwarsplanets.repository.PlanetRepository;
 import com.alantech.starwarsplanets.service.mapper.PlanetMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,7 +29,11 @@ public class PlanetService {
 		return planetRepository.save(planet);
 	}
 
-	public List<Planet> searchByName(String name) {
-		return planetRepository.findAllByNameStartsWith(name);
+	public Page<Planet> findAll(Pageable pageable) {
+		return planetRepository.findAll(pageable);
+	}
+
+	public Optional<Planet> findByName(String name) {
+		return planetRepository.findByName(name);
 	}
 }

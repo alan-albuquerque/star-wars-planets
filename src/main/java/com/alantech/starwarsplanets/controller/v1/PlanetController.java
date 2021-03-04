@@ -1,24 +1,21 @@
 package com.alantech.starwarsplanets.controller.v1;
 
-import java.util.List;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-
+import com.alantech.starwarsplanets.controller.v1.exception.ResourceAlreadyExistsException;
+import com.alantech.starwarsplanets.controller.v1.exception.ResourceNotFoundException;
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.PlanetDTO;
-import com.alantech.starwarsplanets.exception.ResourceNotFoundException;
 import com.alantech.starwarsplanets.service.PlanetService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/planets")
@@ -30,16 +27,30 @@ public class PlanetController {
 
 	@PostMapping("")
 	public ResponseEntity<Planet> create(@Valid @RequestBody PlanetDTO planetDTO) {
-		Planet planet = planetService.create(planetDTO);
-		return new ResponseEntity<>(planet, HttpStatus.CREATED);
+		Optional<Planet> planet = planetService.findByName(planetDTO.getName());
+		if (planet.isPresent()) {
+			throw new ResourceAlreadyExistsException("A planet with the same name already exists.");
+		}
+		Planet createdPlanet = planetService.create(planetDTO);
+		return new ResponseEntity<>(createdPlanet, HttpStatus.CREATED);
 	}
 
-	@GetMapping("/search")
-	public ResponseEntity<List<Planet>> search(@RequestParam @NotBlank String query) {
-		List<Planet> planets = planetService.searchByName(query);
+	@GetMapping("")
+	public ResponseEntity<Page<Planet>> list(Pageable pageable) {
+		Page<Planet> planets = planetService.findAll(pageable);
 		if (planets.isEmpty()) {
 			throw new ResourceNotFoundException();
 		}
 		return new ResponseEntity<>(planets, HttpStatus.OK);
 	}
+
+	@GetMapping("name/{name}")
+	public ResponseEntity<Planet> findByName(@PathVariable("name") String name) {
+		Optional<Planet> planet = planetService.findByName(name);
+		if (planet.isPresent()) {
+			return new ResponseEntity<>(planet.get(), HttpStatus.OK);
+		}
+		throw new ResourceNotFoundException();
+	}
+
 }
