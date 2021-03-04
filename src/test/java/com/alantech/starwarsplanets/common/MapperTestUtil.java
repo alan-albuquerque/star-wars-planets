@@ -35,10 +35,21 @@ public final class MapperTestUtil {
 	 * Convert a JSON string to a list of objects.
 	 *
 	 * @param jsonInput the JSON string.
-	 * @return the converted object.
+	 * @return the converted objects list.
 	 * @throws IOException if it receives a invalid JSON string.
 	 */
 	public static <T> List<T> toObjectList(String jsonInput, Class<T> myClass) throws IOException {
 		return mapper.readValue(jsonInput, mapper.getTypeFactory().constructCollectionType(List.class, myClass));
+	}
+
+	/**
+	 * Convert a JSON string to a object.
+	 *
+	 * @param jsonInput the JSON string.
+	 * @return the converted object.
+	 * @throws IOException if it receives a invalid JSON string.
+	 */
+	public static <T> T toObject(String jsonInput, Class<T> myClass) throws IOException {
+		return mapper.readValue(jsonInput, mapper.getTypeFactory().constructType(myClass));
 	}
 }
