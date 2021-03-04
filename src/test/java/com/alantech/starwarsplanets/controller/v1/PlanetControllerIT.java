@@ -129,16 +129,44 @@ class PlanetControllerIT {
 	@Test
 	void Should_FindByNameReturnNotFound_When_NotExists() throws Exception {
 		this.mockMvc.perform(
-			get("/api/v1/planets/name/{name}", "potato123") // <-- nonexistent name
+			get("/api/v1/planets/name/{name}", "nonexistent") // <-- nonexistent name
+		)
+			.andExpect(status().isNotFound());
+	}
+
+
+	@Test
+	void Should_FindByIdReturnNotFound_When_NotExists() throws Exception {
+		this.mockMvc.perform(
+			get("/api/v1/planets/{id}", "nonexistent") // <-- nonexistent id
 		)
 			.andExpect(status().isNotFound());
 	}
 
 	@Test
-	void Should_FindByNameReturnNotFound_When_ParamIsEmpty() throws Exception {
-		this.mockMvc.perform(
-			get("/api/v1/planets/name/{name}", "")
+	void Should_FindByIdReturnPlanet_When_Exists() throws Exception {
+
+		Planet planet = Planet.builder()
+			.terrain(TERRAIN)
+			.name(UUID.randomUUID().toString())
+			.climate(CLIMATE)
+			.build();
+
+		Planet createdPlanet = planetRepository.save(planet);
+
+
+		MvcResult mvcResult = this.mockMvc.perform(
+			get("/api/v1/planets/{id}", createdPlanet.getId())
 		)
-			.andExpect(status().isNotFound());
+			.andExpect(status().isOk()).andReturn();
+
+		Planet foundedPlanet = MapperTestUtil.toObject(mvcResult.getResponse().getContentAsString(), Planet.class);
+
+		assertThat(foundedPlanet.getTerrain()).isEqualTo(planet.getTerrain());
+		assertThat(foundedPlanet.getName()).isEqualTo(planet.getName());
+		assertThat(foundedPlanet.getClimate()).isEqualTo(planet.getClimate());
+		assertThat(foundedPlanet.getId()).isEqualTo(createdPlanet.getId());
+		assertThat(foundedPlanet.getCreatedDate()).isEqualTo(createdPlanet.getCreatedDate());
+		assertThat(foundedPlanet.getLastModifiedDate()).isEqualTo(createdPlanet.getLastModifiedDate());
 	}
 }

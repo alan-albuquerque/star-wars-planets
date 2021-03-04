@@ -36,4 +36,8 @@ public class PlanetService {
 	public Optional<Planet> findByName(String name) {
 		return planetRepository.findByName(name);
 	}
+
+	public Optional<Planet> findById(String name) {
+		return planetRepository.findById(name);
+	}
 }
