@@ -1,9 +1,10 @@
 package com.alantech.starwarsplanets.service;
 
-import java.util.List;
+import java.util.Optional;
 
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.PlanetDTO;
+import com.alantech.starwarsplanets.service.exception.PlanetAlreadyExistsException;
 import com.alantech.starwarsplanets.repository.PlanetRepository;
 import com.alantech.starwarsplanets.service.mapper.PlanetMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,11 @@ public class PlanetService {
 	private final PlanetMapper planetMapper;
 
 	public Planet create(PlanetDTO planetDTO) {
+		planetRepository
+			.findByName(planetDTO.getName())
+			.ifPresent(planet -> {
+				throw new PlanetAlreadyExistsException();
+			});
 		Planet planet = planetMapper.planetDTOToPlanet(planetDTO);
 		return planetRepository.save(planet);
 	}
