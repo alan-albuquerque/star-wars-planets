@@ -1,4 +1,4 @@
-package com.alantech.starwarsplanets.exception;
+package com.alantech.starwarsplanets.controller.v1.exception;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
+import com.alantech.starwarsplanets.controller.v1.ApiErrors;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,6 +47,11 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<ErrorResponse> handle(ConstraintViolationException e) {
 		ErrorResponse errors = new ErrorResponse();
+
+		ErrorItem rootErrorItem = new ErrorItem();
+		rootErrorItem.setCode(ApiErrors.VALIDATION_ERROR);
+		errors.setError(rootErrorItem);
+
 		for (ConstraintViolation violation : e.getConstraintViolations()) {
 			ErrorItem error = new ErrorItem();
 			error.setCode(violation.getMessageTemplate());
@@ -62,6 +68,22 @@ public class ApiExceptionHandler {
 		error.setMessage(e.getMessage());
 		error.setCode(ApiErrors.NOT_FOUND);
 		return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(ResourceAlreadyExistsException.class)
+	public ResponseEntity<ErrorItem> handle(ResourceAlreadyExistsException e) {
+		ErrorItem error = new ErrorItem();
+		error.setMessage(e.getMessage());
+		error.setCode(ApiErrors.ALREADY_EXISTS);
+		return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+	}
+
+	@ExceptionHandler(Exception.class)
+	public ResponseEntity<ErrorItem> handle() {
+		ErrorItem error = new ErrorItem();
+		error.setMessage("An internal server error occurred.");
+		error.setCode(ApiErrors.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
 	@Getter
