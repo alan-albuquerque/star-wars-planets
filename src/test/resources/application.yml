@@ -4,6 +4,7 @@ spring:
   data:
     mongodb:
       uri: "mongodb://root:123456@localhost:27017/starwars?authSource=admin"
+      auto-index-creation: true
 
 server:
   port: 8080
