@@ -1,6 +1,7 @@
 package com.alantech.starwarsplanets.controller.v1;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.alantech.starwarsplanets.IntegrationTest;
@@ -17,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -169,4 +169,35 @@ class PlanetControllerIT {
 		assertThat(foundedPlanet.getCreatedDate()).isEqualTo(createdPlanet.getCreatedDate());
 		assertThat(foundedPlanet.getLastModifiedDate()).isEqualTo(createdPlanet.getLastModifiedDate());
 	}
+
+
+	@Test
+	void Should_DeleteByIdReturnNotFound_When_NotExists() throws Exception {
+		this.mockMvc.perform(
+			delete("/api/v1/planets/{id}", "nonexistent") // <-- nonexistent id
+		)
+			.andExpect(status().isNotFound());
+	}
+
+	@Test
+	void Should_DeleteByIdReturnSuccess_When_Exists() throws Exception {
+
+		Planet planet = Planet.builder()
+			.terrain(TERRAIN)
+			.name(UUID.randomUUID().toString())
+			.climate(CLIMATE)
+			.build();
+
+		Planet createdPlanet = planetRepository.save(planet);
+
+		MvcResult mvcResult = this.mockMvc.perform(
+			delete("/api/v1/planets/{id}", createdPlanet.getId())
+		)
+			.andExpect(status().isNoContent()).andReturn();
+
+		Optional<Planet> deletedPlanet = planetRepository.findById(createdPlanet.getId());
+
+		assertThat(deletedPlanet).isNotPresent();
+	}
+
 }

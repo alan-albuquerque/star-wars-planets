@@ -1,9 +1,5 @@
 package com.alantech.starwarsplanets.controller.v1;
 
-import java.util.Optional;
-
-import javax.validation.Valid;
-
 import com.alantech.starwarsplanets.controller.v1.exception.ResourceAlreadyExistsException;
 import com.alantech.starwarsplanets.controller.v1.exception.ResourceNotFoundException;
 import com.alantech.starwarsplanets.domain.Planet;
@@ -15,12 +11,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/planets")
@@ -38,6 +33,16 @@ public class PlanetController {
 		}
 		Planet createdPlanet = planetService.create(planetDTO);
 		return new ResponseEntity<>(createdPlanet, HttpStatus.CREATED);
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Object> delete(@PathVariable("id") String id) {
+		Optional<Planet> planet = planetService.findById(id);
+		if (planet.isPresent()) {
+			planetService.deleteById(id);
+			return ResponseEntity.noContent().build();
+		}
+		throw new ResourceNotFoundException();
 	}
 
 	@GetMapping("")

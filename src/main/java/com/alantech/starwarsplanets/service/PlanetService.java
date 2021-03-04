@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.PlanetDTO;
-import com.alantech.starwarsplanets.service.exception.PlanetAlreadyExistsException;
 import com.alantech.starwarsplanets.repository.PlanetRepository;
+import com.alantech.starwarsplanets.service.exception.PlanetAlreadyExistsException;
 import com.alantech.starwarsplanets.service.mapper.PlanetMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,5 +39,9 @@ public class PlanetService {
 
 	public Optional<Planet> findById(String name) {
 		return planetRepository.findById(name);
+	}
+
+	public void deleteById(String name) {
+		planetRepository.deleteById(name);
 	}
 }
