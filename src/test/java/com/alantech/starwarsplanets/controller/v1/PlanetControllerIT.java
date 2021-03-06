@@ -7,7 +7,7 @@ import java.util.UUID;
 import com.alantech.starwarsplanets.IntegrationTest;
 import com.alantech.starwarsplanets.common.MapperTestUtil;
 import com.alantech.starwarsplanets.domain.Planet;
-import com.alantech.starwarsplanets.dto.PlanetDTO;
+import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
 import com.alantech.starwarsplanets.repository.PlanetRepository;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class PlanetControllerIT {
 	@Test
 	void Should_PlanetBeCreated_When_ReceivesValidContent() throws Exception {
 		long planetsCountBefore = planetRepository.count();
-		PlanetDTO planetDTO = PlanetDTO.builder()
+		CreatePlanetDTO planetDTO = CreatePlanetDTO.builder()
 			.terrain(TERRAIN)
 			.name(UUID.randomUUID().toString())
 			.climate(CLIMATE)
@@ -63,7 +63,7 @@ class PlanetControllerIT {
 		long planetsCountBefore = planetRepository.count();
 
 		// we'll send a empty planet, but some fields are required, it must fail with a bad request as response.
-		PlanetDTO planetDTO = PlanetDTO.builder().build();
+		CreatePlanetDTO planetDTO = CreatePlanetDTO.builder().build();
 
 		this.mockMvc.perform(
 			post("/api/v1/planets/")

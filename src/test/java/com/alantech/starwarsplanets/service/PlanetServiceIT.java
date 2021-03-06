@@ -4,8 +4,9 @@ import java.util.UUID;
 
 import com.alantech.starwarsplanets.IntegrationTest;
 import com.alantech.starwarsplanets.domain.Planet;
-import com.alantech.starwarsplanets.dto.PlanetDTO;
+import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
 import com.alantech.starwarsplanets.service.exception.PlanetAlreadyExistsException;
+import com.alantech.starwarsplanets.service.impl.PlanetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @IntegrationTest
 class PlanetServiceIT {
 
-	private final PlanetService planetService;
+	private final PlanetServiceImpl planetService;
 
 	@Test
 	void assertThatPlanetShouldBeCreated() {
-		PlanetDTO planetDTO = PlanetDTO.builder()
+		CreatePlanetDTO planetDTO = CreatePlanetDTO.builder()
 			.climate("climate 1")
 			.name(UUID.randomUUID().toString())
 			.terrain("terrain 1")
@@ -33,7 +34,7 @@ class PlanetServiceIT {
 
 	@Test
 	void assertThatPlanetShouldNotBeCreatedIfAlreadyExists() {
-		PlanetDTO planetDTO = PlanetDTO.builder()
+		CreatePlanetDTO planetDTO = CreatePlanetDTO.builder()
 			.climate("climate 1")
 			.name(UUID.randomUUID().toString())
 			.terrain("terrain 1")

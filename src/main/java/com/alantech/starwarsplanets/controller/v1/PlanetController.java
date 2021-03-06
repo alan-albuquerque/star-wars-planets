@@ -3,8 +3,8 @@ package com.alantech.starwarsplanets.controller.v1;
 import com.alantech.starwarsplanets.controller.v1.exception.ResourceAlreadyExistsException;
 import com.alantech.starwarsplanets.controller.v1.exception.ResourceNotFoundException;
 import com.alantech.starwarsplanets.domain.Planet;
-import com.alantech.starwarsplanets.dto.PlanetDTO;
-import com.alantech.starwarsplanets.service.PlanetService;
+import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
+import com.alantech.starwarsplanets.service.impl.PlanetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,15 +23,15 @@ import java.util.Optional;
 @Validated
 public class PlanetController {
 
-	private final PlanetService planetService;
+	private final PlanetServiceImpl planetService;
 
 	@PostMapping("")
-	public ResponseEntity<Planet> create(@Valid @RequestBody PlanetDTO planetDTO) {
-		Optional<Planet> planet = planetService.findByName(planetDTO.getName());
+	public ResponseEntity<Planet> create(@Valid @RequestBody CreatePlanetDTO createPlanetDTO) {
+		Optional<Planet> planet = planetService.findByName(createPlanetDTO.getName());
 		if (planet.isPresent()) {
 			throw new ResourceAlreadyExistsException("A planet with the same name already exists.");
 		}
-		Planet createdPlanet = planetService.create(planetDTO);
+		Planet createdPlanet = planetService.create(createPlanetDTO);
 		return new ResponseEntity<>(createdPlanet, HttpStatus.CREATED);
 	}
 

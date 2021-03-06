@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class PlanetDTO {
+public class CreatePlanetDTO {
 	private final String id;
 	@NotEmpty
 	private final String name;
