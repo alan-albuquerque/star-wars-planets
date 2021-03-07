@@ -9,7 +9,7 @@ Star Wars API is a Rest API to store and retrieve fantastic data of Star Wars fr
 ## Features
 
 - **Register Planets** with an enrichment feature (currently how many movies the Planet was appeared);
-- **List all** registered Planets with in a nice paginated way;
+- **List all** registered Planets in a nice paginated way;
 - Get a Planet **by ID**;
 - Get a Planet **by Name**;
 - **Delete** a Planet by ID;
@@ -18,10 +18,10 @@ Star Wars API is a Rest API to store and retrieve fantastic data of Star Wars fr
 
 ## Environment
 You'll need to setup your environment with:
-- Docker (developed for: >= 20.10.3);
-- Docker Compose (developed for: >= 1.25.5);
-- Java (developed for: 11)
-- Maven (developed for: >= 3.6.3)
+- **Docker** (developed for: >= 20.10.3);
+- **Docker Compose** (developed for: >= 1.25.5);
+- **Java** (developed for: 11)
+- **Maven** (developed for: >= 3.6.3)
 
 ## Run
 Next, you just need to run two commands:
