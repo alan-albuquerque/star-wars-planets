@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Bean;
 public class OpenApiConfig {
 
 	@Bean
-	public OpenAPI customOpenAPI(@Value("${application.name}") String appDesciption, @Value("${application.version}") String appVersion) {
+	public OpenAPI customOpenAPI(@Value("${application.name}") String appName, @Value("${application.version}") String appVersion) {
 		return new OpenAPI()
 			.info(new Info()
-				.title(appDesciption)
+				.title(appName)
 				.version(appVersion)
-				.description(appDesciption));
+				.description(appName));
 	}
 }
