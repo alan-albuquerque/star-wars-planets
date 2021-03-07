@@ -11,6 +11,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 
@@ -21,6 +23,7 @@ import static org.mockito.Mockito.*;
 
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest(properties = { "logging.level[0].ROOT=DEBUG" })
 class LoggingAspectUnitTest {
 	@Mock
 	Environment environment;
@@ -42,31 +45,12 @@ class LoggingAspectUnitTest {
 	}
 
 	@Test
-	void Should_logAfterThrowingLogError_When_ReceiveException(
-		@Mock JoinPoint joinPoint, @Mock Signature signature, @Mock Logger logger
-	) {
-		when(joinPoint.getSignature()).thenReturn(signature);
-		LoggingAspect loggingAspect = new LoggingAspect(environment, logger);
-		when(signature.getName()).thenReturn("signature name");
-		RuntimeException runtimeException = new RuntimeException("Error message");
-
-		loggingAspect.logAfterThrowing(joinPoint, runtimeException);
-
-		verify(joinPoint, atLeastOnce()).getSignature();
-		verify(logger, atLeastOnce()).error(
-			"Exception in {}() with cause = {}",
-			"signature name",
-			"NULL"
-		);
-	}
-
-	@Test
-	void Should_logAfterThrowingLogError_When_ReceiveExceptionAndItIsDevelopment(
+	void Should_logAfterThrowingLogError_When_ReceiveExceptionAndItIsDebug(
 		@Mock JoinPoint joinPoint, @Mock Signature signature, @Mock Environment env, @Mock Logger logger
 	) {
 		when(signature.getName()).thenReturn("signature name");
 		when(joinPoint.getSignature()).thenReturn(signature);
-		when(env.acceptsProfiles(Profiles.of(AppProperties.DEVELOPMENT_PROFILE))).thenReturn(true);
+		when(logger.isDebugEnabled()).thenReturn(true);
 		LoggingAspect loggingAspect = new LoggingAspect(env, logger);
 		RuntimeException runtimeException = new RuntimeException("Error message");
 

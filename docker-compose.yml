@@ -1,19 +1,6 @@
 version: '3.1'
 
 services:
-  starwarsplanets-service:
-    build:
-      context: .
-    ports:
-      - 8080:8080
-    environment:
-      MONGO_URL: mongodb://root:123456@starwarsplanets-mongo:27017/starwars?authSource=admin
-      REDIS_PORT: 6379
-      REDIS_HOST: starwarsplanets-redis
-    depends_on:
-      - starwarsplanets-mongo
-      - starwarsplanets-redis
-
   starwarsplanets-mongo:
     image: mongo
     restart: always
