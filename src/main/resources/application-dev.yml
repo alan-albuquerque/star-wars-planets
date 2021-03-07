@@ -1,17 +1,19 @@
 logging:
   level:
     ROOT: INFO
-    com.alantech.starwarsplanets: INFO
+    com.alantech.starwarsplanets: DEBUG
 
 spring:
   application:
     name: "Star Wars Planets - DEV"
+
   data:
     mongodb:
-      uri: "mongodb://root:123456@localhost:27017/starwars?authSource=admin"
+      uri: ${MONGO_URL:mongodb://root:123456@localhost:27017/starwars?authSource=admin}
+      auto-index-creation: true
   redis:
-    host: "localhost"
-    port: 6379
+    port: ${REDIS_PORT:6379}
+    host: ${REDIS_HOST:localhost}
 
 application:
   planets-enrichment:

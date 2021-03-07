@@ -3,7 +3,6 @@ package com.alantech.starwarsplanets.aop.logging;
 
 import java.util.Arrays;
 
-import com.alantech.starwarsplanets.config.AppProperties;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -12,8 +11,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 
 /**
  * Aspect for logging execution of service and repository Spring components.
@@ -21,6 +20,7 @@ import org.springframework.core.env.Profiles;
  * By default, it only runs with the "dev" profile.
  */
 @Aspect
+@Profile("dev")
 public class LoggingAspect {
 
 	private final Environment env;
@@ -79,25 +79,14 @@ public class LoggingAspect {
 	public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
 		Logger log = logger(joinPoint);
 		if (log.isDebugEnabled()) {
-			if (env.acceptsProfiles(Profiles.of(AppProperties.DEVELOPMENT_PROFILE))) {
-				logger(joinPoint)
-					.error(
-						"Exception in {}() with cause = '{}' and exception = '{}'",
-						joinPoint.getSignature().getName(),
-						e.getCause() != null ? e.getCause() : "NULL",
-						e.getMessage(),
-						e
-					);
-			}
-			else {
-				logger(joinPoint)
-					.error(
-						"Exception in {}() with cause = {}, message = {}",
-						joinPoint.getSignature().getName(),
-						e.getCause() != null ? e.getCause() : "NULL",
-						e.getMessage()
-					);
-			}
+			logger(joinPoint)
+				.error(
+					"Exception in {}() with cause = '{}' and exception = '{}'",
+					joinPoint.getSignature().getName(),
+					e.getCause() != null ? e.getCause() : "NULL",
+					e.getMessage(),
+					e
+				);
 		}
 	}
 

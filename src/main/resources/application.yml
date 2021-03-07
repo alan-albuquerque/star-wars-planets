@@ -1,7 +1,6 @@
 spring:
   application:
     name: "Star Wars Planets"
-    version: @project.version@
   data:
     mongodb:
       uri: ${MONGO_URL}
