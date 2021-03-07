@@ -6,7 +6,6 @@ import com.alantech.starwarsplanets.IntegrationTest;
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
 import com.alantech.starwarsplanets.exception.PlanetAlreadyExistsException;
-import com.alantech.starwarsplanets.service.impl.PlanetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @IntegrationTest
 class PlanetServiceIT {
 
-	private final PlanetServiceImpl planetService;
+	private final PlanetService planetService;
 
 	@Test
-	void assertThatPlanetShouldBeCreated() {
+	void Should_PlanetBeCreated_When_ReceivesValidInput() {
 		CreatePlanetDTO planetDTO = CreatePlanetDTO.builder()
 			.climate("climate 1")
 			.name(UUID.randomUUID().toString())
@@ -33,7 +32,7 @@ class PlanetServiceIT {
 	}
 
 	@Test
-	void assertThatPlanetShouldNotBeCreatedIfAlreadyExists() {
+	void Should_PlanetNotBeCreated_When_AlreadyExists() {
 		CreatePlanetDTO planetDTO = CreatePlanetDTO.builder()
 			.climate("climate 1")
 			.name(UUID.randomUUID().toString())
@@ -48,6 +47,10 @@ class PlanetServiceIT {
 			() -> planetService.create(planetDTO)
 		);
 		assertThat(exception.getMessage()).isEqualTo("Planet with that name already exists!");
+	}
 
+	@Test
+	void Should_PlaneEnrichmentRunOk_When_Needed() {
+		planetService.startPlanetDataEnrichment();
 	}
 }

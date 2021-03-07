@@ -36,7 +36,6 @@ public class PlanetServiceImpl implements PlanetService {
 	private final CacheManager cacheManager;
 
 	public Planet create(CreatePlanetDTO createPlanetDTO) {
-		this.enrichPlanetData(planetMapper.createPlanetDTOToPlanet(createPlanetDTO));
 		planetRepository
 			.findByName(createPlanetDTO.getName())
 			.ifPresent(planet -> {
@@ -51,7 +50,9 @@ public class PlanetServiceImpl implements PlanetService {
 				log.error("Error on enrich planet {} with swapi data before creation.", planet, e);
 			}
 		}
-		return planetRepository.save(planet);
+		Planet createdPlanet = planetRepository.save(planet);
+		this.clearCaches(createdPlanet);
+		return createdPlanet;
 	}
 
 	public Page<Planet> findAll(Pageable pageable) {
@@ -95,7 +96,7 @@ public class PlanetServiceImpl implements PlanetService {
 
 	@Scheduled(cron = "${application.planets-enrichment.cron}")
 	@SchedulerLock(name = "scheduledPlanetDataEnrichment")
-	protected void scheduledPlanetDataEnrichment() {
+	public void startPlanetDataEnrichment() {
 		if (Boolean.FALSE.equals(appProperties.getPlanetsEnrichment().getEnabled())) { // avoiding exception if null
 			return;
 		}

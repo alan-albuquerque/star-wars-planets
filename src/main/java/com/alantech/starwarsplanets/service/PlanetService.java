@@ -17,4 +17,6 @@ public interface PlanetService {
 	Optional<Planet> findById(String name);
 
 	void deleteById(String name);
+
+	void startPlanetDataEnrichment();
 }

@@ -5,14 +5,17 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.alantech.starwarsplanets.IntegrationTest;
-import com.alantech.starwarsplanets.common.MapperTestUtil;
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
 import com.alantech.starwarsplanets.repository.PlanetRepository;
+import com.alantech.starwarsplanets.testUtils.RestResponsePage;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,8 +33,8 @@ class PlanetControllerIT {
 
 	private final MockMvc mockMvc;
 	private final PlanetRepository planetRepository;
+	private final ObjectMapper objectMapper;
 
-	private final static String SEARCH_BY_NAME_KEY = "name";
 	private final static String TERRAIN = "terrain test";
 	private final static String CLIMATE = "climate test";
 
@@ -47,7 +50,7 @@ class PlanetControllerIT {
 		this.mockMvc.perform(
 			post("/api/v1/planets/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(MapperTestUtil.toJson(planetDTO))
+				.content(objectMapper.writeValueAsString(planetDTO))
 		)
 			.andExpect(status().isCreated());
 
@@ -70,7 +73,7 @@ class PlanetControllerIT {
 		this.mockMvc.perform(
 			post("/api/v1/planets/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(MapperTestUtil.toJson(planetDTO))
+				.content(objectMapper.writeValueAsString(planetDTO))
 		)
 			.andExpect(status().isBadRequest());
 
@@ -94,7 +97,7 @@ class PlanetControllerIT {
 		this.mockMvc.perform(
 			post("/api/v1/planets/")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(MapperTestUtil.toJson(planet))
+				.content(objectMapper.writeValueAsString(planet))
 		)
 			.andExpect(status().isConflict());
 
@@ -102,6 +105,58 @@ class PlanetControllerIT {
 
 	}
 
+	@Test
+	void Should_ListReturnPlanets_When_Exists() throws Exception {
+
+		Planet planet1 = Planet.builder()
+			.terrain(TERRAIN)
+			.name(UUID.randomUUID().toString())
+			.climate(CLIMATE)
+			.build();
+		Planet planet2 = Planet.builder()
+			.terrain(TERRAIN)
+			.name(UUID.randomUUID().toString())
+			.climate(CLIMATE)
+			.build();
+
+		planetRepository.deleteAll();
+		planetRepository.save(planet1);
+		planetRepository.save(planet2);
+
+		MvcResult mvcResult = this.mockMvc.perform(
+			get("/api/v1/planets/")
+		)
+			.andExpect(status().isOk()).andReturn();
+
+		Page<Planet> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RestResponsePage<Planet>>() {});
+
+		Planet firstPlanet = response.getContent().stream().filter(planet -> planet.getName().equals(planet1.getName())).findFirst().get();
+		Planet secondPlanet = response.getContent().stream().filter(planet -> planet.getName().equals(planet2.getName())).findFirst().get();
+		assertThat(firstPlanet).isEqualTo(planet1);
+		assertThat(secondPlanet).isEqualTo(planet2);
+		assertThat(response.getTotalPages()).isEqualTo(1);
+		assertThat(response.getTotalElements()).isEqualTo(2);
+
+	}
+
+	@Test
+	void Should_ListReturnEmptyList_When_WithoutPlanets() throws Exception {
+
+		planetRepository.deleteAll();
+
+		MvcResult mvcResult = this.mockMvc.perform(
+			get("/api/v1/planets/")
+		)
+			.andExpect(status().isOk()).andReturn();
+
+		Page<Planet> response = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<RestResponsePage<Planet>>() {});
+
+		List<Planet> planets = response.getContent();
+		assertThat(planets).isEmpty();
+		assertThat(response.getTotalPages()).isZero();
+		assertThat(response.getTotalElements()).isZero();
+
+	}
 	@Test
 	void Should_FindByNameReturnPlanet_When_Exists() throws Exception {
 
@@ -118,7 +173,7 @@ class PlanetControllerIT {
 		)
 			.andExpect(status().isOk()).andReturn();
 
-		Planet foundedPlanet = MapperTestUtil.toObject(mvcResult.getResponse().getContentAsString(), Planet.class);
+		Planet foundedPlanet = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Planet.class);
 
 		assertThat(foundedPlanet.getTerrain()).isEqualTo(planet.getTerrain());
 		assertThat(foundedPlanet.getName()).isEqualTo(planet.getName());
@@ -162,7 +217,7 @@ class PlanetControllerIT {
 		)
 			.andExpect(status().isOk()).andReturn();
 
-		Planet foundedPlanet = MapperTestUtil.toObject(mvcResult.getResponse().getContentAsString(), Planet.class);
+		Planet foundedPlanet = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Planet.class);
 
 		assertThat(foundedPlanet.getTerrain()).isEqualTo(planet.getTerrain());
 		assertThat(foundedPlanet.getName()).isEqualTo(planet.getName());
