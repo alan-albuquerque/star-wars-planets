@@ -9,3 +9,8 @@ spring:
   data:
     mongodb:
       uri: "mongodb://root:123456@localhost:27017/starwars?authSource=admin"
+
+application:
+  planets-enrichment:
+    enabled: false
+    cron: "0 0/1 * 1/1 * ?" # every minute

@@ -13,3 +13,6 @@ application:
   star-wars-api:
    url: "https://swapi.dev/api/"
    timeout: 3000  # ms
+  planets-enrichment:
+    enabled: true
+    cron: "0 0 0 1/1 * ?" # daily at 00:00

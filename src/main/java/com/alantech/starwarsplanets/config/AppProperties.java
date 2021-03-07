@@ -14,10 +14,16 @@ public class AppProperties {
 	public static final String DEVELOPMENT_PROFILE = "dev";
 
 	public final StarWarsApi starWarsApi = new StarWarsApi();
+	public final PlanetsEnrichment planetsEnrichment = new PlanetsEnrichment();
 
 	@Data
 	public static class StarWarsApi {
 		private String url;
 		private Integer timeout;
+	}
+	@Data
+	public static class PlanetsEnrichment {
+		private String cron;
+		private Boolean enabled;
 	}
 }
