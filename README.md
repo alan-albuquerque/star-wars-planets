@@ -17,36 +17,54 @@ Star Wars API is a Rest API to store and retrieve fantastic data of Star Wars fr
 # Getting Started
 
 ## Environment
+
 You'll need to setup your environment with:
+
 - **Docker** (developed for: >= 20.10.3);
 - **Docker Compose** (developed for: >= 1.25.5);
 - **Java** (developed for: 11)
 - **Maven** (developed for: >= 3.6.3)
 
 ## Run
+
 Next, you just need to run two commands:
 
 ```shell
 ./mvnw clean package -DskipTests
 ```
+
 Then, run the application and its dependencies
+
 ```shell
 docker-compose -f docker-compose.yml -f docker-compose.api.yml up
 ```
+
 **Tip:** put `-d` at the end to run in background.
 
 ### Running only the dependencies
+
 If you want to run the API from your IDE or directly from terminal, you can run just the dependencies:
+
 ```shell
 docker-compose -f docker-compose.yml up
 ```
 
+## Swagger
+
+With the application running, you can access the Swagger UI to interact with the API:
+
+- http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config
+
 ## Test
+
 Run:
+
 ```shell
 docker-compose -f docker-compose.yml up -d
 ```
+
 Then:
+
 ```shell
 ./mvnw clean test
 ```
