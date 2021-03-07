@@ -48,9 +48,4 @@ class PlanetServiceIT {
 		);
 		assertThat(exception.getMessage()).isEqualTo("Planet with that name already exists!");
 	}
-
-	@Test
-	void Should_PlaneEnrichmentRunOk_When_Needed() {
-		planetService.startPlanetDataEnrichment();
-	}
 }
