@@ -1,4 +1,4 @@
-package com.alantech.starwarsplanets.service.exception;
+package com.alantech.starwarsplanets.exception;
 
 public class PlanetAlreadyExistsException extends RuntimeException {
 	public PlanetAlreadyExistsException() {

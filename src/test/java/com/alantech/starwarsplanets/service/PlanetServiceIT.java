@@ -5,7 +5,7 @@ import java.util.UUID;
 import com.alantech.starwarsplanets.IntegrationTest;
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
-import com.alantech.starwarsplanets.service.exception.PlanetAlreadyExistsException;
+import com.alantech.starwarsplanets.exception.PlanetAlreadyExistsException;
 import com.alantech.starwarsplanets.service.impl.PlanetServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;

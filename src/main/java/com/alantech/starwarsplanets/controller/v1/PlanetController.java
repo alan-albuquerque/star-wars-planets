@@ -1,21 +1,27 @@
 package com.alantech.starwarsplanets.controller.v1;
 
-import com.alantech.starwarsplanets.controller.v1.exception.ResourceAlreadyExistsException;
-import com.alantech.starwarsplanets.controller.v1.exception.ResourceNotFoundException;
+import java.util.Optional;
+
+import javax.validation.Valid;
+
 import com.alantech.starwarsplanets.domain.Planet;
 import com.alantech.starwarsplanets.dto.CreatePlanetDTO;
-import com.alantech.starwarsplanets.service.impl.PlanetServiceImpl;
+import com.alantech.starwarsplanets.exception.ResourceAlreadyExistsException;
+import com.alantech.starwarsplanets.exception.ResourceNotFoundException;
+import com.alantech.starwarsplanets.service.PlanetService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/planets")
@@ -23,7 +29,7 @@ import java.util.Optional;
 @Validated
 public class PlanetController {
 
-	private final PlanetServiceImpl planetService;
+	private final PlanetService planetService;
 
 	@PostMapping("")
 	public ResponseEntity<Planet> create(@Valid @RequestBody CreatePlanetDTO createPlanetDTO) {

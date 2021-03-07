@@ -1,4 +1,4 @@
-package com.alantech.starwarsplanets.controller.v1.exception;
+package com.alantech.starwarsplanets.exception;
 
 public class ResourceAlreadyExistsException extends RuntimeException {
 

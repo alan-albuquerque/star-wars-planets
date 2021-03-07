@@ -20,6 +20,7 @@ public class Planet extends AbstractAuditableDocument {
 	private String name;
 	private String climate;
 	private String terrain;
+	private Integer filmsCount;
 
 	@Override
 	public boolean equals(Object o) {

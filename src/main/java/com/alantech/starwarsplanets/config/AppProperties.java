@@ -12,4 +12,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class AppProperties {
 	public static final String DEVELOPMENT_PROFILE = "dev";
+
+	public final StarWarsApi starWarsApi = new StarWarsApi();
+
+	@Data
+	public static class StarWarsApi {
+		private String url;
+		private Integer timeout;
+	}
 }

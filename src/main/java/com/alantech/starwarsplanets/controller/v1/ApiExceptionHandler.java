@@ -1,4 +1,4 @@
-package com.alantech.starwarsplanets.controller.v1.exception;
+package com.alantech.starwarsplanets.controller.v1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,8 @@ import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import com.alantech.starwarsplanets.controller.v1.ApiErrors;
+import com.alantech.starwarsplanets.exception.ResourceAlreadyExistsException;
+import com.alantech.starwarsplanets.exception.ResourceNotFoundException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
