@@ -14,6 +14,12 @@ Star Wars API is a Rest API to store and retrieve fantastic data of Star Wars fr
 - Get a Planet **by Name**;
 - **Delete** a Planet by ID;
 
+## Implementation
+
+- AOP for logging utility that helps with useful logs in development mode.
+- Redis for caching, it's easy to configure a distributed environment in the future.
+- Data enrichment with read performance in mind, we enrich it when the entity is registered, and afterwards, a job runs every day at midnight to update the data enrichment again. That way, all read operations perform best and aren't unstable if the third-party API goes down.
+
 # Getting Started
 
 ## Environment
