@@ -1,7 +1,7 @@
 logging:
   level:
     ROOT: INFO
-    com.alantech.starwarsplanets: DEBUG
+    com.alantech.starwarsplanets: INFO
 
 spring:
   application:
@@ -15,5 +15,5 @@ spring:
 
 application:
   planets-enrichment:
-    enabled: true
+    enabled: false
     cron: "0 0/1 * 1/1 * ?" # every minute

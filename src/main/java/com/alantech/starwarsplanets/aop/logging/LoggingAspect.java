@@ -77,23 +77,27 @@ public class LoggingAspect {
 	 */
 	@AfterThrowing(pointcut = "applicationPackagePointcut() && springBeanPointcut()", throwing = "e")
 	public void logAfterThrowing(JoinPoint joinPoint, Throwable e) {
-		if (env.acceptsProfiles(Profiles.of(AppProperties.DEVELOPMENT_PROFILE))) {
-			logger(joinPoint)
-				.error(
-					"Exception in {}() with cause = '{}' and exception = '{}'",
-					joinPoint.getSignature().getName(),
-					e.getCause() != null ? e.getCause() : "NULL",
-					e.getMessage(),
-					e
-				);
-		}
-		else {
-			logger(joinPoint)
-				.error(
-					"Exception in {}() with cause = {}",
-					joinPoint.getSignature().getName(),
-					e.getCause() != null ? e.getCause() : "NULL"
-				);
+		Logger log = logger(joinPoint);
+		if (log.isDebugEnabled()) {
+			if (env.acceptsProfiles(Profiles.of(AppProperties.DEVELOPMENT_PROFILE))) {
+				logger(joinPoint)
+					.error(
+						"Exception in {}() with cause = '{}' and exception = '{}'",
+						joinPoint.getSignature().getName(),
+						e.getCause() != null ? e.getCause() : "NULL",
+						e.getMessage(),
+						e
+					);
+			}
+			else {
+				logger(joinPoint)
+					.error(
+						"Exception in {}() with cause = {}, message = {}",
+						joinPoint.getSignature().getName(),
+						e.getCause() != null ? e.getCause() : "NULL",
+						e.getMessage()
+					);
+			}
 		}
 	}
 

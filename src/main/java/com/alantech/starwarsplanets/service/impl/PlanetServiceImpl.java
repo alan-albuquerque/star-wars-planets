@@ -46,6 +46,9 @@ public class PlanetServiceImpl implements PlanetService {
 			try {
 				this.enrichPlanetData(planet);
 			}
+			catch (SwapResourceNotFoundException e) {
+				log.warn("Planet \"{}\" was not enriched before creation because it not exists on swapi.", planet.getName());
+			}
 			catch (Exception e) {
 				log.error("Error on enrich planet {} with swapi data before creation.", planet, e);
 			}

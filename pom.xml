@@ -115,6 +115,16 @@
             <artifactId>shedlock-provider-mongo</artifactId>
             <version>4.21.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.5.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-data-rest</artifactId>
+            <version>1.5.4</version>
+        </dependency>
     </dependencies>
 
 	<build>

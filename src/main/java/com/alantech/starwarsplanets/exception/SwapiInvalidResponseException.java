@@ -6,4 +6,8 @@ public class SwapiInvalidResponseException extends RuntimeException {
 		super(message);
 	}
 
+	public SwapiInvalidResponseException(String message, Throwable e) {
+		super(message, e);
+	}
+
 }

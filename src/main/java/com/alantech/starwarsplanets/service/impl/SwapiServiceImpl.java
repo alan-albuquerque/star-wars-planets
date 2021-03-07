@@ -35,7 +35,7 @@ public class SwapiServiceImpl implements SwapiService {
 			response = this.swapiClient.searchPlanetByName(name).execute().body();
 		}
 		catch (IOException e) {
-			throw new SwapiInvalidResponseException("Swapi returned an invalid body response");
+			throw new SwapiInvalidResponseException("Swapi returned an invalid body response", e);
 		}
 		if (response == null) {
 			throw new SwapiInvalidResponseException("Swapi returned an invalid empty response");
