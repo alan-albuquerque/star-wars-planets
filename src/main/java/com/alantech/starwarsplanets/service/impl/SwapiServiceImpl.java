@@ -9,12 +9,14 @@ import com.alantech.starwarsplanets.network.swapi.SwapiClient;
 import com.alantech.starwarsplanets.network.swapi.model.ResultsResponse;
 import com.alantech.starwarsplanets.network.swapi.model.SwapiPlanet;
 import com.alantech.starwarsplanets.service.SwapiService;
+import org.springframework.context.annotation.Profile;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile("!test")
 public class SwapiServiceImpl implements SwapiService {
 	SwapiClient swapiClient;
 

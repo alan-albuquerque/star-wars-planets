@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class SwapiPlanet implements Serializable {
 	private String name;
 	@JsonProperty("rotation_period")

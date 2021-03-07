@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: test
   application:
     name: "Star Wars Planets - TEST"
   data:
@@ -9,4 +11,10 @@ spring:
 server:
   port: 8080
 
-
+application:
+  star-wars-api:
+    url: ""
+    timeout: 0
+  planets-enrichment:
+    enabled: false
+    cron: "0 0 0 1/1 * ?"
