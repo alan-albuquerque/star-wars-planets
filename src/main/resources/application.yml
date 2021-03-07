@@ -5,6 +5,9 @@ spring:
     mongodb:
       uri: ${MONGO_URL}
       auto-index-creation: true
+  redis:
+    port: ${REDIS_PORT}
+    host: ${REDIS_HOST}
 
 server:
   port: 8080

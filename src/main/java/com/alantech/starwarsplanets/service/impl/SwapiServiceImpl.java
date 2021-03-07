@@ -1,5 +1,7 @@
 package com.alantech.starwarsplanets.service.impl;
 
+import java.io.IOException;
+
 import com.alantech.starwarsplanets.config.AppProperties;
 import com.alantech.starwarsplanets.exception.SwapResourceNotFoundException;
 import com.alantech.starwarsplanets.exception.SwapiInvalidResponseException;
@@ -7,13 +9,10 @@ import com.alantech.starwarsplanets.network.swapi.SwapiClient;
 import com.alantech.starwarsplanets.network.swapi.model.ResultsResponse;
 import com.alantech.starwarsplanets.network.swapi.model.SwapiPlanet;
 import com.alantech.starwarsplanets.service.SwapiService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
-
-import java.io.IOException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class SwapiServiceImpl implements SwapiService {
@@ -28,7 +27,6 @@ public class SwapiServiceImpl implements SwapiService {
 		this.swapiClient = retrofit.create(SwapiClient.class);
 	}
 
-	@Cacheable("planetByName")
 	public SwapiPlanet getPlanetByName(String name) {
 		ResultsResponse<SwapiPlanet> response;
 		try {

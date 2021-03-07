@@ -8,6 +8,8 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 
 @Getter
 @Setter
@@ -15,7 +17,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @Document(collection = "planets")
-public class Planet extends AbstractAuditableDocument {
+public class Planet extends AbstractAuditableDocument implements Serializable {
 	@Indexed(unique = true)
 	private String name;
 	private String climate;

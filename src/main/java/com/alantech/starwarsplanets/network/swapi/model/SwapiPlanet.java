@@ -1,12 +1,13 @@
 package com.alantech.starwarsplanets.network.swapi.model;
 
+import java.io.Serializable;
+import java.util.Date;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
-public class SwapiPlanet {
+public class SwapiPlanet implements Serializable {
 	private String name;
 	@JsonProperty("rotation_period")
 	private String rotationPeriod;

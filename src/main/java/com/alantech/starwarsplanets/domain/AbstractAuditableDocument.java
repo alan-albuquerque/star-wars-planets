@@ -1,5 +1,6 @@
 package com.alantech.starwarsplanets.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Getter;
@@ -17,7 +18,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @SuperBuilder
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class AbstractAuditableDocument {
+public class AbstractAuditableDocument implements Serializable {
 	@Id
 	protected String id;
 
